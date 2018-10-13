@@ -1,0 +1,259 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+header {
+    background: #373737;
+}
+
+.user-profile-details {
+    padding: 11.5px 20px;
+    float: right;
+    width: 210px;
+    border-left: 2px solid #2e2d2d;
+}
+
+.logo {
+    padding: 20px 25px;
+}
+
+span {
+    font-size: 12px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-profile-img {
+    float: left;
+    margin-right: 7px;
+}
+
+.user-profile-details .glyphicon {
+    position: absolute;
+    top: 29px;
+    right: 19px;
+    cursor: pointer;
+}
+
+.body-container {
+    padding: 32px 44px;
+}
+
+
+.mask span {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: right;
+    color: #595151;
+    position: relative;
+    top: 8px;
+    text-transform: uppercase;
+}
+
+.body-text {
+    color: #595151;
+    font-size: 14px;
+}
+
+/*Table styles*/
+
+.user-table .thead {
+    display: inline-block;
+    padding: 14px 15px;
+    float: left;
+    height: 48px;
+    text-transform: uppercase;
+    text-align: center;
+    background: #626161;
+    font-size: 14px;
+    line-height: 1.29;
+    color: #ffffff;
+    border: 1px solid #dddddd;
+}
+
+.user-table .tbody {
+    display: inline-block;
+    padding: 14px 15px;
+    float: left;
+    height: 48px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.29;
+    color: #343333;
+    border: 1px solid #dddddd;
+}
+
+.user-table .thead:nth-child(1) .thead:nth-child(6) {
+    width: 10%;
+    border-top-left-radius: 6px;
+}
+
+.user-table .thead:nth-child(2) .thead:nth-child(3) .thead:nth-child(4) .thead:nth-child(5) {
+    width: 20%;
+}
+
+.add-btn {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.71;
+    width: 102px;
+    height: 32px;
+    border-radius: 4px;
+    background: white;
+    color: #626161;
+    border: solid 1px #626161;
+}
+
+.add-btn img {
+    padding-right: 3px;
+    margin-top: -2px;
+}
+
+.mtop-25 {
+    margin-top: 25px;
+}
+
+.save-btn {
+    width: 61px;
+    height: 32px;
+    border-radius: 4px;
+    background-color: #fa8a1c;
+    border: 1px solid #fa8a1c;
+    color: #ffffff;
+    margin-left: 7px;
+    font-weight: 400;
+}
+
+.modal-title{
+    color: #fa8a1c;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.list-table tr th{
+    background-color: #626161;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    border-radius: 4px 4px 0 0;
+}
+
+.list-table .table-bordered td, .list-table .table-bordered th{
+    border: 1px solid #ddd;
+    text-align: left;
+   
+}
+.table-responsive .table-bordered .tabledrop{
+
+    text-align: center;
+
+}
+.tablesize .tabledrop:first-child .tabledrop:last-child{
+    width:5% !important;
+}
+
+.list-table tr td .dlt-icon{
+    margin: auto;
+    width: auto;
+    display: block;
+    cursor: pointer;
+}
+.list-table .form-group{
+    margin-bottom: 0;
+    width: 150px !important;
+}
+ /* .list-table tr td.ver-mid{
+    padding-top: 20px;
+}  */
+.skill-model .modal-header img.close-icon{
+    vertical-align: top;
+}
+.round-corner-search input{
+    border-radius: 20px;
+    height: 28px;
+    font-size: 12px;
+    color: #969696;    
+}
+.round-corner-search .search_icon_pos{
+    position: absolute;
+    right: 45px;
+    top: 5px;
+}
+.modalsize{
+min-height: 600px;
+
+}
+/*.modal-dialog{
+    max-width: 600px !important;
+    height: 500px !important;
+}*/
+.modal-dialog .form-check{
+    font-size: 12px;
+    color: #343333;
+    margin-bottom: 5px;  
+    text-align: left;  
+}
+.modal .modal-dialog .modalsize{
+height: 600px;;
+
+}
+.btn-submit-org{
+    background-color: #fa8a1c;    
+    font-size:12px;
+    color: #fff;
+}
+
+.modal-footer .popupsubmit{
+
+    margin-right: 30px;
+}
+
+.btn-skip{
+    background-image: linear-gradient(to top, #e6e6e6, #ffffff);
+    border: solid 1px #b8b8b8;
+    color: #4c4949;
+    font-size: 12px;
+}
+.bottom_sub{
+    border-top: 1px solid #dadada;
+    padding-top: 25px;    
+}
+.bottom_sub .pull-right{
+    float: right;
+}
+
+.modal-footer{
+    border: 0;
+}
+.yrs-adj{
+    font-size: 10px;
+}
+.view-repotees{
+    padding: 15px 0 0 0;
+    border-top: 1px solid #dadada;    
+}
+.round-corner-search{
+    position: relative;
+}
+.btn-reportees{
+    height: 28px;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+    background-color: #fa8a1c;
+    line-height: 13px;
+}
+td span i.fa-plus-circle{
+    font-size: 23px;
+    color: #333;
+    cursor:pointer;
+}
+.mat-checkbox-label{
+    display: inline-block !important;
+    color: #000;
+}

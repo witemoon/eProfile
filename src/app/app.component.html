@@ -1,0 +1,27 @@
+<div class="main-container">
+    <header>
+        <img src="assets/img/eprofile-logo.png" alt="eprofile logo" class="logo">
+        <div class="dropdown user-profile-details">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                <img src="assets/img/user-profile.png" alt="User profile icon" class="user-profile-img">
+                <span class="user-name" *ngFor="let logDetails of empDetailslist">{{logDetails.Employee_Name}}</span>
+                <br>
+                <span class="user-designation" *ngFor="let logDetails of empDetailslist">{{logDetails.Designation}}</span>
+                <span class="glyphicon glyphicon-menu-down"></span>
+            </button>
+            
+            <div class="dropdown-menu color dropdowncolor" aria-labelledby="dropdownMenuButton" *ngFor="let logDetails of empDetailslist">
+                 <h3>USER PROFILE</h3>
+              <a class="dropdown-item" ><span>Emp ID</span>: {{logDetails.Employee_Code}}</a>
+              <a class="dropdown-item" ><span>Location</span>: {{logDetails.Current_Working_Location}}</a>
+              <a class="dropdown-item" ><span>Shift Time</span>: {{logDetails.Shift}}</a>
+              <a class="dropdown-item" ><span>Repoting To</span>: {{logDetails.Reporting_Manager}}</a>
+              
+            </div>
+          </div>
+    </header>
+    <!-- <app-tech-skill-list></app-tech-skill-list> -->
+    <router-outlet></router-outlet>
+</div>
+
+

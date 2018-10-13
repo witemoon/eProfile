@@ -1,0 +1,158 @@
+
+<section class="body-container">
+  <p class="body-text">Search here to view the technical skills of emplyees</p>
+    <div class="modal-body col-4">
+        <div>
+            <div class="round-corner-search mgr-search form-group">
+                <input type="search" class="form-control" placeholder="Search by Name or ID" [(ngModel)]="searchEmployee" aria-label="Search employee name" aria-describedby="basic-addon1">
+                <!-- <ul> -->
+                    <div>
+                      {{ employee.name }}
+                    </div>
+                  <!-- </ul> -->
+                <span class="search_icon_pos" id="basic-addon1">
+                    <img src="assets/img/search-icon.svg" alt="searchIcons">
+                </span>
+            </div>
+       
+        <div class="pull-right">
+            <button type="submit" class="btn btn-submit-org mgr-view-btn" (click)="getEmployeeList()" data-dismiss="modal">View My Reportees</button>
+        </div>
+    </div>
+
+    </div>
+    <div class="mgr-listtable width-control-table">
+            <table class="table table-bordered">
+                    <thead>
+                        <tr class="tablesize">
+                        <tr>
+                            <th  class="tabledrop" >SL.NO</th>
+                            <th  class="tabledrop" >NAME</th>
+                            <th  class="tabledrop" >EMPLOYEE ID *</th>
+                            <th  class="tabledrop" > SKILL </th>
+                            <th  class="tabledrop" >CORE SKILLS *</th>
+                            <th  class="tabledrop" >RATING *</th>
+                            <th  class="tabledrop" >EXPERIENCE</th>
+                            <th  class="tabledrop" >SUBMITTED DATE *</th>
+                            <th  class="tabledrop" ></th>
+                        </tr>
+                     
+                        </thead>
+                        <tr *ngFor="let reportees of reporteesList;">
+                            <td rowspan="3">1</td>
+                            <td rowspan="3" class="ver-mid text-center">{{reportees.employeeName}}</td>
+                            <td rowspan="3" class="ver-mid text-center"> {{reportees.employeeId}}
+                            <td rowspan="3" class="ver-mid text-center">Angular</td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                        <option>Select</option>
+                                        <option>Angular</option>
+                                        <option>Jquery</option>
+                                        <option>css</option>
+                                        
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                        <option>Select</option>
+                                        <option>Beginners</option>
+                                        <option>Intermediate</option>
+                                        <option>Expert</option>
+                                        
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleFormControlSelect1">
+                                        <option>Select</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                    </select>
+                                </div>
+                            </td>
+                                    <td rowspan="3" class="ver-mid text-center"> {{reportees.submittedDate | date: 'dd/MMM/yyyy'}} </td>
+                            <td class="ver-mid">
+                                <img src="assets/img/mask.svg" alt="deleteIcon" class="image-fluid dlt-icon">
+                            </td>
+                        </tr>
+                    </table>
+            </div>
+   
+    <!-- <div class="table-responsive list-table">
+        <table class="table table-bordered">
+            <tr class="">
+                <th>SL.No</th>
+                <th>Name</th>
+                <th>Employee ID</th>
+                <th>Skill*</th>
+                <th>Core Skill*</th>
+                <th>Rating*</th>
+                <th>Experience in Months*</th>
+                <th>Submitted Date</th>
+                <th></th>
+            </tr>
+            <tr *ngFor="let reportees of reporteesList;">
+                <td rowspan="3">1</td>
+                <td rowspan="3" class="ver-mid text-center">{{reportees.employeeName}}</td>
+                <td rowspan="3" class="ver-mid text-center"> {{reportees.employeeId}}
+                <td rowspan="3" class="ver-mid text-center">Angular</td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Select</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Select</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Text">
+                    </div>
+                </td>
+                        <td rowspan="3" class="ver-mid text-center"> {{reportees.submittedDate | date: 'dd/MMM/yyyy'}} </td>
+                <td class="ver-mid">
+                    <img src="assets/img/mask.svg" alt="deleteIcon" class="image-fluid dlt-icon">
+                </td>
+            </tr>
+        </table>
+    </div> -->
+
+    <!--User Table-->
+
+    <div class="mtop-25">
+
+        <button class="save-btn">Save</button>
+    </div>
+</section>
+
+<!--modal popup-->

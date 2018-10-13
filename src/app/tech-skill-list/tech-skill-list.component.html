@@ -1,0 +1,196 @@
+<section class="body-container">
+        <div class="mask">
+           <img src="assets/img/technical-skill-icon.png" alt="Skill Icon" class="tech-icon">
+           <span>Technical Skills</span>
+        </div>
+        <p class="body-text">You have been redirected to e-Profile to fill your Technical Details</p>
+        <div class="list-table width-control-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="tablesize ">
+                        <tr>
+                            <th  class="tabledrop" rowspan="2">SL.NO</th>
+                            <th  class="tabledrop" rowspan="2">Skills *</th>
+                            <th  class="tabledrop" rowspan="2">Core Skill *</th>
+                            <th  class="tabledrop" rowspan="2"> RATING *</th>
+                            <th  class="tabledrop" colspan="2">EXPERIENCE *</th>
+                            <th  class="tabledrop" rowspan="2"></th>
+                        </tr>
+                        <tr>
+                            <th>Years</th>
+                            <th>Months</th>
+                        </tr>
+                        </thead>
+                </table>
+            <mat-spinner style="margin:0 auto;" class="mat-spinner-color" *ngIf = "spinnerFlag"></mat-spinner>
+            <div *ngIf="!spinnerFlag" class="table-body-scroll">
+                <table class="table table-bordered" class="table table-bordered">
+                    <tbody *ngIf="techskillList" >
+                        <tr *ngFor="let skills of addedSkill; index as i">
+                            <td *ngIf ="skills.coreskills.length > 0">{{ i + 1 }}</td>
+                            <td class="ver-mid text-center" *ngIf ="skills.coreskills.length > 0">{{skills.skillName}}</td>
+                            <td>
+                             <div class="form-group" *ngFor="let parent of skills.coreskills">
+                                    <input type="text" name="FirstName" value="Angular" disabledclass="form-control"  id="exampleFormControlSelect1" [(ngModel)]="parent.core_Skill_Name" disabled><br>
+                                <!-- <select class="form-control"  id="exampleFormControlSelect1" [(ngModel)]="parent.core_Skill_Name">
+                                <option *ngFor="let core of parent.defaultCoreSkills">{{core.core_Skill_Name}}</option>
+                                </select> -->
+                            </div>
+                            <!-- <div class="form-group">
+                                <input type="text" [value]="">
+                            </div> -->
+                            </td>
+                            <td>
+                            <div class="form-group" *ngFor="let ratings of skills.coreskills">
+                                <select class="form-control"  id="exampleFormControlSelect1"  [(ngModel)]="ratings.core_Skill_rating">
+                                <option>Select</option>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Expert</option>
+                                </select>
+                            </div>
+                            </td>
+                            <td >
+                            <div class="form-group" placeholder="Years"  *ngFor="let months of skills.coreskills">
+                                <!-- <input style="width:100px;margin-left: 25px" type="number" placeholder="Years" [(ngModel)]="months.core_Skill_Experience_in_Years"> -->
+                                <select class="form-control form yersmnt-dropdown"   id="exampleFormControlSelect1" [(ngModel)]="months.core_Skill_Experience_in_Years">
+                                 <option value="">Select</option>
+                                 <option value=0> 0 </option>
+                                <option value=1>1 </option>
+                                <option value=2>2 </option>
+                                <option value=3>3 </option>
+                                <option value=4>4 </option>
+                                <option value=5>5 </option>
+                                <option value=6>6 </option>
+                                <option value=7>7 </option>
+                                <option value=8>8 </option>
+                                <option value=9>9 </option>
+                                <option value=10>10 </option>
+                                <option value=11>11 </option>
+                                <option value=12>12 </option>
+                                <option value=13>13 </option>
+                                <option value=14>14 </option>
+                                <option value=15>15 </option>
+                                <option value=16>16 </option>
+                                <option value=17>17</option>
+                                <option value=18>18</option>
+                                <option value=19>19</option>
+                                <option value=20>20</option>
+                                <option value=21>21</option>
+                                <option value=22>22</option>
+                                <option value=23>23</option>
+                                <option value=24>24</option>
+                                <option value=25>25 </option>
+                                <option value=26>26 </option>
+                                <option value=27>27 </option>
+                                <option value=28>28 </option>
+                                <option value=29>29 </option>
+                                <option value=30>30 </option>
+                                <option value=31>31 </option>
+                                </select>
+                                <!-- <a class="yrs-adj">(Years)</a> -->
+                                <!-- <input style="width:100px;margin-left: 25px" type="number" placeholder="Months" [(ngModel)]="months.core_Skill_Experience_in_Months"> -->
+                            </div>
+                            </td>
+                          
+                            <td>
+                            <div class="form-group" *ngFor="let months of skills.coreskills">
+                                <select class="form-control yersmnt-dropdown"  id="exampleFormControlSelect1" [(ngModel)]="months.core_Skill_Experience_in_Months">
+                                    <option value="">Select</option>
+                                    <option value=0>0 </option>
+                                <option value=1>1 </option>
+                                <option value=2>2 </option>
+                                <option value=3>3 </option>
+                                <option value=4>4 </option>
+                                <option value=5>5 </option>
+                                <option value=6>6 </option>
+                                <option value=7>7 </option>
+                                <option value=8>8 </option>
+                                <option value=9>9 </option>
+                                <option value=10>10 </option>
+                                <option value=11>11 </option>
+                                </select>
+                                <!--  <a class="yrs-adj">(Months)</a> -->
+                                <!-- <input style="width:100px;margin-left: 25px" type="number" placeholder="Months" [(ngModel)]="months.core_Skill_Experience_in_Months"> -->
+                            </div>
+                            </td>
+                            <td>
+                            <div class="form-group form-delete" *ngFor="let delete of skills.coreskills;index as x">
+                                <img src="assets/img/mask.svg" alt="deleteIcon" class="image-fluid dlt-icon" (click)="onDeleteSkillsRow(skills,skills.coreskills, skills.coreskills[x].core_skillid, x, i)">
+                            </div>
+                            </td>
+                        
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--User Table-->
+        <div class="mtop-25">
+            <div class="bottom_sub mtop-25">
+                <button class="add-btn" data-toggle="modal" data-target="#skillRefModal" (click)="skillModalShow()">
+                        <img src="assets/img/add-icon.png" alt="add button"> Add Skills</button>
+                <button type="submit" class="btn btn-submit-org" (click)="onSaveSkillslist()" [disabled]="renderedAddedSkill.length <= 0">Save</button>
+              <div class="pull-right">
+                 <button type="submit" class="btn btn-submit-org"  (click)="onSubmit(renderedAddedSkill)" [disabled]="renderedAddedSkill.length <= 0">Submit</button>
+                 <button type="submit" class="btn btn-skip" style="margin-left:0" [disabled]= 'disableBtn' (dblclick)="disableBtn = true" >Skip for Now</button>
+              </div>
+           </div>
+        </div>
+     </section>
+     <!--modal popup-->
+     <div id="skillRefModal" class="modal fade skill-model" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modalsize">
+           <!-- Modal content-->
+           <div class="modal-content modalheight">
+              <div class="modal-header modalborder" >
+                 <h4 class="modal-title text-left">Skill Reference</h4>
+                 <button type="button" class="close" data-dismiss="modal">
+                 <img src="assets/img/close-icon.svg" alt="closeicon" class="close-icon"> </button>
+              </div>
+              <div class="for-line" style="border: 1px solid #fa8a1c">
+                 <!-- for line -->
+              </div>
+              <div class="modal-body">
+                 <div class="col-5 row round-corner-search form-group">
+                    <input type="search" class="form-control"  [(ngModel)]="techSearchText" placeholder="Search Entire Menu" aria-label="Search Entire Menu" aria-describedby="basic-addon1">
+                    <span class="search_icon_pos" id="basic-addon1">
+                    </span>
+                 </div>
+                 <div class="col-12">
+                    <div class="row ">
+                       <div class="table-responsive list-table list-table-popup" style="width: 700px; margin-top: 20px; border-bottom: 1px solid #e4e4e4">
+                          <table class="table table-bordered" style="table-layout :fixed" >
+                             <tr>
+                                <th>SI NO</th>
+                                <th>Skill*</th>
+                                <th>Core Skill*</th>
+                             </tr>
+                          </table>
+                          <div class="table list-table-popup-body">
+                            <table class="table table-bordered"> 
+                                <tr *ngFor="let skill of AllSkills.skillLists | techSearchfilter:techSearchText index as i">
+                                    <td class="ver-mid text-center">{{i + 1}}</td>
+                                    <td class="ver-mid text-center">{{skill.skill_Name}}</td>
+                                    <td>
+                                    <div class="form-check"  *ngFor="let coreskill of skill.coreSkills">
+                                        <input class="form-check-input" id="item.core_skillid" type="checkbox" name="coreskill.core_Skill_Name" (change)="checkValue($event, skill ,coreskill)" [checked]="coreskill.selected" />
+                                        <label class="form-check-label" >{{coreskill.core_Skill_Name}}</label>
+                                    </div>
+                                    </td>
+                                </tr>
+                            </table>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              <div class="modal-footer">
+                 <div class="row pull-left">
+                    <button type="submit" style="margin-right: -7px" class="btn btn-submit-org popupsubmit" (click)="techSkillSubmit()" data-dismiss="modal">Submit</button>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+     <!--modal popup-->
