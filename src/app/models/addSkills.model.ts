@@ -2,6 +2,7 @@ export interface AddSkillsModel
 { 
     employeeId?:any,
     skillName?:any;
+    coreSkillName ?: any;
     skillId:any,  
     coreSkillIds?:any,
     coreSkillRatings?:any,
@@ -10,8 +11,8 @@ export interface AddSkillsModel
     isActiveFlag?:any,
     insightId?:any,
     coreskills:[{
-        core_Skill_Experience_in_Months: number,
-        core_Skill_Experience_in_Years: number,
+        core_Skill_Experience_in_Months: any,
+        core_Skill_Experience_in_Years: any,
         core_Skill_Name: string,
         core_Skill_rating: any,
         core_skillid: number,

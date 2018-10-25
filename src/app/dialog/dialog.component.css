@@ -1,9 +1,17 @@
 .alerting{
-    background-color: #fa8a1c;
     padding: 5px 32px;
     border: none;
 }
 .zalerting{
     padding: 5px 32px;
     border: none;
+}
+.header{
+    background-color: #626161;
+    color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    padding: 5px 32px;
+    text-align: center;
 }

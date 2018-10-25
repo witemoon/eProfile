@@ -22,10 +22,11 @@ import { DialogComponent } from "../dialog/dialog.component";
 })
 export class TechSkillListComponent implements OnInit {
   skillLists: any;
-  techskillList = false;
-  AllSkills: Allskils;
+  alertFlag : boolean = false;
+  AllSkills: any;
   allskilldetails:any;
   spinnerFlag: boolean;
+  validationFlag : boolean;
   errorMessage;
   submitFlag : boolean;
   allskillJson;
@@ -34,116 +35,210 @@ export class TechSkillListComponent implements OnInit {
   dskillIndex: any;
   dskillParentIndex: any;
   searchList: any;
+  otherSkillids: number[] = [];
   tempPostSkills: Allskils;
   tempCoreSkills: coreSkillsModel;
   renderedAddedSkill: AddSkillsModel[];
   preStoredData : Allskils;
   preStoredMap : any[];
   preStoredSkill : AddSkillsModel[];
+  skipCount : any;
+  employeeDetail : any;
+  loginDetail : any;
+  tempAllSkills: Allskils;
 
 
-  constructor(private apiservice:EProfileService, private storage: LocalStorageService, private dialog: MatDialog) { 
+
+
+  constructor(private apiservice:EProfileService, private dialog: MatDialog) { 
     this.addedSkill = [];
     this.AllSkills = {} as Allskils;
-    //this.AllSkills.skillLists = [];
   }
-  
+
   ngOnInit() {
-    this.techskillList=false;
-    this.getAllSkills();
+    
+    this.validationFlag = true;
     this.renderedAddedSkill=[];
+    this.otherSkillids = [];
     this.preStoredSkill = [];
     this.spinnerFlag = false;
     this.submitFlag = false;
+   
     this.apiservice.getAllSkills().subscribe(
       result => {
-       //console.log(result);
         this.AllSkills=result;
+        this.tempAllSkills = result;
       },
      
       error => this.errorMessage = <any>error);
    
+      this.apiservice.employeeDetail.subscribe( result => {
+        this.employeeDetail = result.employeeDetails;
+        this.loginDetail = result.loginDetail[0];
+
+      
+
       this.searchList = {
-        "insightId": '',
-        "searchKey": '104476'
+        "insightId": this.employeeDetail.Insight_Id,
+        "searchKey": ""
       };
       
       this.apiservice.getEmployeeList(this.searchList).subscribe(result => {
         this.preStoredData = result[0];
        if(this.preStoredData){
           for(var i=0; i < this.preStoredData.skillLists.length ; i++ ){
-            let skillItem = {} as AddSkillsModel;
-            skillItem.skillId = this.preStoredData.skillLists[i].skill_id;
-            skillItem.skillName = this.preStoredData.skillLists[i].skill_Name;
-            var tempLoop = this.preStoredData.skillLists[i].coreSkills.length;
-            this.coreskills = [];
+            
+            if(this.preStoredData.skillLists[i].skill_id != 0){
+              let skillItem = {} as AddSkillsModel;
+              skillItem.skillId = this.preStoredData.skillLists[i].skill_id;
+              skillItem.skillName = this.preStoredData.skillLists[i].skill_Name;
+              var tempLoop = this.preStoredData.skillLists[i].coreSkills.length;
+              this.coreskills = [];
+              for(var j=0; j < tempLoop; j++){
+                 this.tempCoreSkills = {} as coreSkillsModel;
+                 this.tempCoreSkills.core_Skill_Experience_in_Months =  (this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
+                 this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
+                 this.tempCoreSkills.core_Skill_Name = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Name;
+                 this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating || 0;
+                 this.tempCoreSkills.core_skillid = this.preStoredData.skillLists[i].coreSkills[j].core_skillid;
+                 this.tempCoreSkills.isSelected = true;
+                 this.tempCoreSkills.newSkillSetIds = this.preStoredData.skillLists[i].coreSkills[j].newSkillSetIds;
+                 this.coreskills.push(this.tempCoreSkills);
+  
+                 this.AllSkills.skillLists.forEach( (data) => {
+                  if(data.skill_id == skillItem.skillId){
+                      data.coreSkills.forEach(subData =>{
+                        if(subData.core_skillid == this.tempCoreSkills.core_skillid){
+                          subData.selected = true;
+                        }
+                      });
+                  };
+                });
+              }
+              skillItem.coreskills = this.coreskills;
+              this.renderedAddedSkill.push(skillItem);
+              
+            }
+
+            else{
+                var tempLoop = this.preStoredData.skillLists[i].coreSkills.length;
+         
             for(var j=0; j < tempLoop; j++){
-               //console.log("correskillexp",this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months);
+              let skillItem = {} as AddSkillsModel;
+              skillItem.skillId = this.preStoredData.skillLists[i].skill_id;
+              skillItem.skillName = this.preStoredData.skillLists[i].skill_Name;
+              this.coreskills = [];
                this.tempCoreSkills = {} as coreSkillsModel;
-               this.tempCoreSkills.core_Skill_Experience_in_Months =  (this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12);
-               this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12);
+               this.tempCoreSkills.core_Skill_Experience_in_Months =  (this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
+               this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
                this.tempCoreSkills.core_Skill_Name = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Name;
-               this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating;
+               this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating || 0;
                this.tempCoreSkills.core_skillid = this.preStoredData.skillLists[i].coreSkills[j].core_skillid;
                this.tempCoreSkills.isSelected = true;
                this.tempCoreSkills.newSkillSetIds = this.preStoredData.skillLists[i].coreSkills[j].newSkillSetIds;
-
                this.coreskills.push(this.tempCoreSkills);
-
-               this.AllSkills.skillLists.forEach( (data) => {
-                if(data.skill_id == skillItem.skillId){
-                    data.coreSkills.forEach(subData =>{
-                      if(subData.core_skillid == this.tempCoreSkills.core_skillid){
-                        subData.selected = true;
-                      }
-                    });
-                };
-              });
+               skillItem.coreskills = this.coreskills;
+               this.renderedAddedSkill.push(skillItem);
             }
-            skillItem.coreskills = this.coreskills;
-            this.renderedAddedSkill.push(skillItem);
-          }
-         this.techSkillSubmit();
-         console.log(this.renderedAddedSkill);
 
-        // this.preStoredMap.forEach((data, index)=>{
-        //   this.preStoredSkill[index].skillId = data.skill_id;
-        //   this.preStoredSkill[index].skillName = data.skill_Name;
-        //   this.preStoredSkill[index].coreskills = data.coreSkills
-        // });
+          }}
+
+         this.techSkillSubmit();
         }
        
       });
-    }
 
-  
- 
-  getAllSkills(){
-   
+      this.apiservice.getSkipCount(this.employeeDetail.Employee_Id).subscribe(result =>{
+        this.skipCount = result.skipCount;
+      })
+    
+  })
+
 }
+ 
+
 selectedRoles = [];
 
+skipNow(){
+let payload =  {
+              "employeeId":this.employeeDetail.Employee_Id,
+              "skipCount":this.skipCount -1
+                }
+    this.apiservice.postSkipCount(payload).subscribe(result=>{
+    let status =  result.status;
+    if(status == "success"){
+    this.skipCount = this.skipCount -1;
+     };
+  })
+}
 
-checkValue(event, skill, coreskill) {
+skipModal() {
+  const dialogConfig = new MatDialogConfig();
+ dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = {
+  id: 1,
+  description :"No of skips left : "+ this.skipCount,
+  title : "Confirm Skip!"
+  };
+  const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(result => {
+  if(result){
+    this.skipNow();
+    window.location.href = "http://172.16.105.151:8080/router.html";
+  }
+});
+}
+
+addOtherSkill(){
+  
+
+  
+  let otherIndex = this.tempAllSkills.skillLists.findIndex(skills => skills.skill_id == 0);
+  let otherCoreSkills:any = {};
+
+  let skillItem = {} as AddSkillsModel;
+    skillItem.skillId = 0;
+    skillItem.skillName = "Others";
+    otherCoreSkills.core_Skill_rating = 'Select';
+    otherCoreSkills.core_Skill_Experience_in_Months = 'Select';
+    otherCoreSkills.core_Skill_Experience_in_Years = 'Select';
+    otherCoreSkills.selected = true;
+    this.coreskills = [];
+      this.coreskills.push(otherCoreSkills);
+      skillItem.coreskills = this.coreskills ;
+      this.renderedAddedSkill.push(skillItem);
+      this.AllSkills.skillLists.push(skillItem);
+}
+
+
+checkValue(event, skill, core) {
+  let coreskill = {} as any;
+  let parentIndex = this.tempAllSkills.skillLists.findIndex(skills=> skills.skill_id == skill.skill_id);
+  let childIndex = this.tempAllSkills.skillLists[parentIndex].coreSkills.findIndex(coreSkills => coreSkills.core_skillid == core.core_skillid);
+  if(skill.skill_id != 0){
     
+    this.AllSkills.skillLists[parentIndex].coreSkills[childIndex].selected = true;
+  }
   if (event.target.checked) {
     let skillItem = {} as AddSkillsModel;
-    skillItem.skillId = skill.skill_id;
-    skillItem.skillName = skill.skill_Name;
+    skillItem.skillId = this.tempAllSkills.skillLists[parentIndex].skill_id;
+    skillItem.skillName = this.tempAllSkills.skillLists[parentIndex].skill_Name;
 
     coreskill.core_Skill_rating = 'Select';
-    coreskill.core_Skill_Experience_in_Months = 0;
-    coreskill.core_Skill_Experience_in_Years = 0;
-    coreskill.defaultCoreSkills = skill.coreSkills;
+    coreskill.core_Skill_Name = this.tempAllSkills.skillLists[parentIndex].coreSkills[childIndex].core_Skill_Name;
+    coreskill.core_skillid = this.tempAllSkills.skillLists[parentIndex].coreSkills[childIndex].core_skillid;
+    coreskill.core_Skill_Experience_in_Months = 'Select';
+    coreskill.core_Skill_Experience_in_Years = 'Select';
+    coreskill.defaultCoreSkills = this.tempAllSkills.skillLists[parentIndex].coreSkills;
     coreskill.selected = true;
     let selectedSkill = this.renderedAddedSkill.find(skillFilter => {
-       return skillFilter.skillId === skill.skill_id});
+    return skillFilter.skillId === skill.skill_id && skillFilter.skillId!=0 });
   
-    //this selectedskill is localmap of addedskill of same category
+ 
     if (!selectedSkill) {
       this.coreskills = [];
       this.coreskills.push(coreskill);
-      //console.log(this.coreskills);
       skillItem.coreskills = this.coreskills ;
       this.renderedAddedSkill.push(skillItem);
     }
@@ -155,28 +250,27 @@ checkValue(event, skill, coreskill) {
   }
 
   else {      
-    let unselectedskill = this.renderedAddedSkill.find(unselectedskill => unselectedskill.skillId === skill.skill_id);
-    //let unselectedcore = unselectedskill.coreskills as any[];
-    //let unselectedindex = unselectedskill.coreskills.indexOf(coreskill);
-    //unselectedcore.splice(unselectedindex, 1);
+    if( skill.skill_id != 0){
+      let unselectedskill = this.renderedAddedSkill.find(unselectedskill => unselectedskill.skillId === skill.skill_id);
+      let index = this.renderedAddedSkill.indexOf(unselectedskill);
+      let parentIndex = this.renderedAddedSkill[index].coreskills.indexOf(coreskill);
+      this.renderedAddedSkill[index].coreskills.splice(parentIndex,1);
+      if (this.renderedAddedSkill[index].coreskills.length <= 0) {
+        let index = this.renderedAddedSkill.indexOf(unselectedskill);
+        this.renderedAddedSkill.splice(index, 1);
+      }
+    }
 
-    let index = this.renderedAddedSkill.indexOf(unselectedskill);
-    let parentIndex = this.renderedAddedSkill[index].coreskills.indexOf(coreskill);
-    this.renderedAddedSkill[index].coreskills.splice(parentIndex,1);
-
-    if (this.renderedAddedSkill[index].coreskills.length <= 0) {
+    else{
+      let unselectedskill = this.renderedAddedSkill.find(unselectedskill => (unselectedskill.skillId === skill.skill_id)&&(unselectedskill.coreskills[0].core_Skill_Name == coreskill.core_Skill_Name));
       let index = this.renderedAddedSkill.indexOf(unselectedskill);
       this.renderedAddedSkill.splice(index, 1); 
     }
-
    }
-   //console.log(this.renderedAddedSkill); 
 }
 
 techSkillSubmit(){
-  this.techskillList = true;
   this.addedSkill = this.renderedAddedSkill;
-  console.log(this.renderedAddedSkill);
  }
 
  
@@ -187,80 +281,81 @@ techSkillSubmit(){
 
 
  onSubmit(renderedAddedSkill){
-  this.openModal();
-  //this.onSaveSkillslist();
-  // this.spinnerFlag = true;
-  // this.renderedAddedSkill.forEach(parentSkills => {
-  //   let coreSkillIds:any = [];
-  //   let coreSkillRatings: any = [];
-  //   let coreExpInMonths: any = [];
-  //   let newSkillSetIds: any = [];
-  //     parentSkills.coreskills.forEach(skills => {
-  //       coreSkillIds.push(skills.core_skillid);
-  //       coreSkillRatings.push(skills.core_Skill_rating);
-  //       coreExpInMonths.push(Number(skills.core_Skill_Experience_in_Years)*12+(Number(skills.core_Skill_Experience_in_Months)));
-  //       newSkillSetIds.push(skills.newSkillSetIds || 0);
-  //     });
-  //     parentSkills.coreSkillIds = coreSkillIds.join("~");
-  //     parentSkills.coreSkillRatings = coreSkillRatings.join("~");
-  //     parentSkills.coreExpInMonths = coreExpInMonths.join("~");
-  //     parentSkills.newSkillSetIds = newSkillSetIds.join("~");
-  //     parentSkills.isActiveFlag = "1";
-  //     parentSkills.insightId = "abdulkhadir_t";
-  //     parentSkills.employeeId = "100396";
-  //     parentSkills.skillId = parentSkills.skillId.toString();
-  // });
-  
-  //    this.tempCoreSkills = [{}] as any;
-  //  this.renderedAddedSkill.forEach((parentSkills,index) => {
-  //    this.tempCoreSkills[index] = parentSkills.coreskills
-  //     delete parentSkills.coreskills;
-  //  })
-  // //console.log({skill: this.renderedAddedSkill});
-  //    this.apiservice.postAddCoreSkills({skill: this.renderedAddedSkill}).subscribe(
-  //    result => {
-  //      console.log('result',result);
-  //      this.renderedAddedSkill.forEach((parentSkills,index) => {
-  //       parentSkills.coreskills = this.tempCoreSkills[index] 
-  //       this.spinnerFlag = false;
-  //      })
-  //    },
-  //    error => this.errorMessage = <any>error);
+   this.validator();
+   if(this.validationFlag == true){
+    this.openModal();
+   }
  }
   
+//  let parentIndex = this.tempAllSkills.skillLists.findIndex(skills=> skills.skill_id == skill.skill_id);
+//  let childIndex = this.tempAllSkills.skillLists[parentIndex].coreSkills.findIndex(coreSkills => coreSkills.core_skillid == core.core_skillid);
+//  if(skill.skill_id != 0){
+//    this.AllSkills.skillLists[parentIndex].coreSkills[childIndex].selected == true;
+//  }
 
-onDeleteSkillsRow(skills, coreSkills,id, index, parentIndex) {
+onDeleteSkillsRow(skills, coreSkills,id, newSkillSetIds, parentIndex) {
 
-  //console.log(coreSkills);
+  if(skills.skillId != 0){
+    // console.log('executing');
 
-  let masterIndex = this.renderedAddedSkill.findIndex(skillFilter => {
-    return skillFilter.skillId == skills.skillId;
-  });
-  let childIndex = this.renderedAddedSkill[masterIndex].coreskills.findIndex(coreskillFilter => {
-    return coreskillFilter.core_skillid == id;
-  });
+    let masterIndex = this.renderedAddedSkill.findIndex(skillFilter => {
+      return skillFilter.skillId == skills.skillId;
+    });
+    let childIndex = this.renderedAddedSkill[masterIndex].coreskills.findIndex(coreskillFilter => {
+      return coreskillFilter.core_skillid == id;
+    });
+    
+    this.renderedAddedSkill[masterIndex].coreskills.splice(childIndex, 1);
+    for (var e in this.AllSkills.skillLists) {
+      for (var d in this.AllSkills.skillLists[e].coreSkills) {
+        if (this.AllSkills.skillLists[e].coreSkills[d].core_skillid == id) {
+          // console.log("executed");
+          this.AllSkills.skillLists[e].coreSkills[d].selected = false;
+          // console.log(this.AllSkills.skillLists[e]);
+        }
+      }
+    };
+  }
 
-  //console.log(masterIndex);
-  //console.log(childIndex);
-
-  this.renderedAddedSkill[masterIndex].coreskills.splice(childIndex,1);
-  // if(this.renderedAddedSkill[masterIndex].coreskills.length <= 0){
-  //   this.renderedAddedSkill.splice(masterIndex,1);
-  // }
-
-  /*coreSkills.splice(index,1);
-  if(skills.coreskills.length == 0){
-    this.addedSkill.splice(parentIndex, 1);
-  }*/
-for (var e in this.AllSkills.skillLists){
-  for (var d in this.AllSkills.skillLists[e].coreSkills){
-     console.log('allSkills',this.AllSkills);
-    if (this.AllSkills.skillLists[e].coreSkills[d].core_skillid == id){
-      this.AllSkills.skillLists[e].coreSkills[d].selected = false;
+  else{
+    let masterIndex, i ;
+    
+    if(newSkillSetIds != null){
+      for(i=0; i<this.renderedAddedSkill.length;i++){
+        if(this.renderedAddedSkill[i].coreskills[0].newSkillSetIds == newSkillSetIds){
+          masterIndex = i;
+          break;
+          }
+        }
+        let payload = {
+          "newSkillSetIds":this.renderedAddedSkill[masterIndex].coreskills[0].newSkillSetIds,
+          "isActiveFlag":"0",
+          "otherFlag":"1"
+        }
+        this.apiservice.deleterOtherSkills(payload).subscribe(res=>{
+          this.ngOnInit();
+        })
     }
+
+
+    else{
+      for(i=0; i<this.renderedAddedSkill.length;i++){
+        if(this.renderedAddedSkill[i].coreskills[0].core_Skill_Name == coreSkills[0].core_Skill_Name){
+          masterIndex = i;
+          break;
+          }
+    }
+    for (var e in this.AllSkills.skillLists) {
+      for (var d in this.AllSkills.skillLists[e].coreSkills) {
+        if (this.AllSkills.skillLists[e].skill_id == 0) {
+          this.AllSkills.skillLists[e].coreSkills[0].selected = false;
+        }
+      }
+    };
+    this.renderedAddedSkill.splice(masterIndex, 1);
+  }
 }
-}; 
-  
+
 }
 
 
@@ -269,12 +364,12 @@ openModal() {
  dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
   dialogConfig.data = {
-  id: 1
+  id: 1,
+  description :"You are about to submit the Technical Skills. Would you like to continue",
+  title : "Confirm Submission!"
   };
   const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
   dialogRef.afterClosed().subscribe(result => {
-  console.log("Dialog was closed" );
-  console.log(result)
   if(result){
     this.submitFlag = true;
     this.onSaveSkillslist();
@@ -282,6 +377,49 @@ openModal() {
 });
 }
 
+
+validator(){
+  this.validationFlag = false;
+  this.alertFlag = true;
+  if (this.renderedAddedSkill.length > 0){
+    let skipper = false;
+    let k = this.renderedAddedSkill.length -1;
+    if(k==0 && (this.renderedAddedSkill[k].coreskills.length <= 0)){
+      this.validationFlag = true;
+    }
+    for(let m=k; m >= 0; m--){
+    if(this.renderedAddedSkill[m].coreskills.length <= 0){
+      continue
+    }
+    else{
+      k=m;
+      break;
+    }
+  }
+    for(let i=0; i<this.renderedAddedSkill.length ; i++){
+      for( let j=0; j<this.renderedAddedSkill[i].coreskills.length; j++){
+        let l = this.renderedAddedSkill[i].coreskills.length - 1;
+        if((this.renderedAddedSkill[i].coreskills[j].core_Skill_rating != "Select") &&  (this.renderedAddedSkill[i].coreskills[j].core_Skill_Experience_in_Months != "Select") && this.renderedAddedSkill[i].coreskills[j].core_Skill_Experience_in_Years != "Select" && this.renderedAddedSkill[i].coreskills[j].core_Skill_Name != null){
+          if(i == k){
+            if((this.renderedAddedSkill[k].coreskills[l].core_Skill_rating != "Select") &&  (this.renderedAddedSkill[k].coreskills[l].core_Skill_Experience_in_Months != "Select") && this.renderedAddedSkill[k].coreskills[l].core_Skill_Experience_in_Years != "Select" && this.renderedAddedSkill[i].coreskills[j].core_Skill_Name != null){
+              this.validationFlag = true;
+            }
+          }
+          continue;
+        }
+        skipper = true;
+        break;
+      }
+      if(skipper == true){
+        break;
+      }
+    }
+ }
+}
+
+alert(){
+  this.alertFlag = false;
+}
 
 onSaveSkillslist() {
   
@@ -291,19 +429,33 @@ onSaveSkillslist() {
     let coreSkillRatings: any = [];
     let coreExpInMonths: any = [];
     let newSkillSetIds: any = [];
+    let newSkillName : any = [];
       parentSkills.coreskills.forEach(skills => {
-        coreSkillIds.push(skills.core_skillid);
+        newSkillName.push(skills.core_Skill_Name);
+        coreSkillIds.push(skills.core_skillid || 0);
         coreSkillRatings.push(skills.core_Skill_rating);
         coreExpInMonths.push(Number(skills.core_Skill_Experience_in_Years)*12+(Number(skills.core_Skill_Experience_in_Months)));
         newSkillSetIds.push(skills.newSkillSetIds || 0);
       });
-      parentSkills.coreSkillIds = coreSkillIds.join("~");
-      parentSkills.coreSkillRatings = coreSkillRatings.join("~");
-      parentSkills.coreExpInMonths = coreExpInMonths.join("~");
-      parentSkills.newSkillSetIds = newSkillSetIds.join("~");
-      parentSkills.isActiveFlag = "1";
-      parentSkills.insightId = "ajay_pr";
-      parentSkills.employeeId = "2744";
+      
+      if(parentSkills.skillName == "Others"){
+        parentSkills.coreSkillIds = coreSkillIds[0].toString();
+        parentSkills.coreSkillRatings = coreSkillRatings[0].toString();
+        parentSkills.coreExpInMonths = coreExpInMonths[0].toString();
+        parentSkills.newSkillSetIds = newSkillSetIds[0].toString();
+        parentSkills.coreSkillName = newSkillName[0];
+        parentSkills.isActiveFlag = "1";
+      }
+      else{
+        parentSkills.coreSkillIds = coreSkillIds.join("~");
+        parentSkills.coreSkillRatings = coreSkillRatings.join("~");
+        parentSkills.coreExpInMonths = coreExpInMonths.join("~");
+
+        parentSkills.isActiveFlag = "1";
+        parentSkills.newSkillSetIds = newSkillSetIds.join("~");
+      }
+      parentSkills.insightId = this.employeeDetail.Insight_Id;
+      parentSkills.employeeId = this.employeeDetail.Employee_Id;
       parentSkills.skillId = parentSkills.skillId.toString();
   });
   
@@ -312,7 +464,7 @@ onSaveSkillslist() {
      this.tempCoreSkills[index] = parentSkills.coreskills
       delete parentSkills.coreskills;
    })
-     console.log({skill: this.renderedAddedSkill});
+     
      this.apiservice.postAddCoreSkills({skill: this.renderedAddedSkill}).subscribe(
      result => {
        this.renderedAddedSkill.forEach((parentSkills,index) => {
@@ -326,40 +478,10 @@ onSaveSkillslist() {
          window.location.href = "http://172.16.105.151:8080/router.html";
        }
        else{
-       this.ngOnInit();
+        this.ngOnInit();
        }
      },
      error => this.errorMessage = <any>error);
 }
   
-
 }
-
-//   console.log(this.addedSkill);
-//   console.log(this.renderedAddedSkill);
-//     this.tempPostSkills = {} as Allskils;
-//     this.tempPostSkills.skillLists = [{}] as any;
-//   for(let i=0;i<this.renderedAddedSkill.length; i++){
-//     this.tempPostSkills.employeeId = this.renderedAddedSkill[i].employeeId;
-//     this.tempPostSkills.insightId = this.renderedAddedSkill[i].insightId;
-//     this.tempPostSkills.coreExpInMonths = this.renderedAddedSkill[i].coreExpInMonths;
-//     this.tempPostSkills.coreExpInYears = (this.renderedAddedSkill[i].coreExpInMonths / 12);
-//     this.tempPostSkills.coreSkillIds = this.renderedAddedSkill[i].coreSkillIds;
-//     this.tempPostSkills.coreSkillRatings = this.renderedAddedSkill[i].coreSkillRatings;
-//     this.tempPostSkills.employeeName ="Naga Gopi Raju Nallagonda";
-//     this.tempPostSkills.skillVersions = null;
-//     this.tempPostSkills.searchKey = null;
-//     this.tempPostSkills.skillId = this.renderedAddedSkill[i].skillId;
-//     this.tempPostSkills.skillName = this.renderedAddedSkill[i].skillName;
-//     this.tempPostSkills.newSkillSetIds = this.renderedAddedSkill[i].newSkillSetIds;
-//     this.tempPostSkills.isActiveFlag = this.renderedAddedSkill[i].isActiveFlag;
-//     this.tempPostSkills.skillLists[i].coreSkills = [{}] as any;
-//     for(let j=0;j<this.renderedAddedSkill[i].coreskills.length;j++){
-//       this.tempPostSkills.skillLists[i].coreSkills[j] = this.renderedAddedSkill[i].coreskills[j];
-//         // this.tempPostSkills.skillLists[i].coreSkills[j].newSkillSetIds = this.renderedAddedSkill[i].coreskills[j].newSkillSetIds;
-//         // this.tempPostSkills.skillLists[i].coreSkills[j].core_Skill_Name = this.renderedAddedSkill[i].coreskills[j].core_Skill_Name;
-//         // this.tempPostSkills.skillLists[i].coreSkills[j].core_Skill_rating = this.renderedAddedSkill[i].coreskills[j].core_Skill_rating;
-//         // this.tempPostSkills.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months = this.renderedAddedSkill[i].coreskills[j].core_Skill_Experience_in_Months;
-//       }
-// }
-//     console.log('temppostskills',this.tempPostSkills);

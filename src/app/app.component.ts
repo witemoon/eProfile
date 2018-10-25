@@ -24,12 +24,12 @@ export class AppComponent {
   userName:any;
 
     ngOnInit() {
-    this.userName = "kalpana_pr";
+
     this.isauthanticate = {"isAuthenticate":true};
  
     this.apiservice.getEmployeeDetail(this.isauthanticate).subscribe(
-      result => {
-        this.empDetailslist = result.loginDetail;
+        result => {
+          this.empDetailslist = result.loginDetail;
      //  console.log('test', this.empDetailslist);
       
         // for (var i = 0; i < this.empDetailslist.length; i++) {

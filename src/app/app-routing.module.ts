@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'techskill', component: TechSkillListComponent },
   { path: 'managerskill', component: ManagerSkillListComponent },
 
-  {path:'',redirectTo:'/',pathMatch:'full'}
+  {path:'',redirectTo:'/techskill',pathMatch:'full'}
 ];
 
 @NgModule({

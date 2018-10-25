@@ -8,18 +8,19 @@ import 'rxjs/add/operator/map';
 export class EProfileService {
   //headers: HttpHeaders;
   headers: Headers;
-  url: string;
-  url2 :string;
+  public employeeDetail : Observable<any>;
+  url2: string;
+  url :string;
   options: RequestOptions;
   constructor(private https: HttpClient,private http: Http){
-    this.url = "http://172.16.107.83:9090/eprofile/api";
-    this.url2 = 'https://api.myjson.com/bins/s7638';
+    this.url = "http://172.16.107.83:9090/eprofile/api";  //Bhagya
+    this.url2 = 'http://10.100.201.35:9090/eprofile/api';  //Hari
 
     // this.headers = new HttpHeaders();
     // this.headers.append('Content-Type', 'application/json');
     // this.headers.append('uid', 'THANGAPRAKASH_A');
 
-    this.headers = new Headers({ 'Content-Type': 'application/json', 'uid': 'ajay_pr' });
+    this.headers = new Headers({ 'Content-Type': 'application/json', 'uid': 'surendar_g' });
     this.options = new RequestOptions({ headers: this.headers });
   }
   getAllSkills() {
@@ -40,13 +41,27 @@ export class EProfileService {
    
 
     let body = JSON.stringify(emplpayload);
-    return this.http.post(this.url+'/landingpage/gotolanding',body,this.options).map(this.extractData);
+    return this.employeeDetail = this.http.post(this.url+'/landingpage/gotolanding',body,this.options).map(this.extractData);
 
+  }
+
+  postSkipCount(payload){
+    let body = JSON.stringify(payload);
+    return this.http.post(this.url +'/skill/insertSkipCount',body,this.options).map(this.extractData);
+  }
+
+  deleterOtherSkills(payload){
+    let body = JSON.stringify(payload);
+    return this.http.post(this.url +'/skill/deleteCoreSkill',body,this.options).map(this.extractData);
+  }
+
+  getSkipCount(id){
+    return this.http.get(this.url +'/skill/getSkipCount?employeeId='+ id).map(this.extractData);
   }
 
   private extractData(res: Response) {
     let body = res.json();
-    console.log(body);
+    //console.log(body);
     return body || {};
 }
 }
