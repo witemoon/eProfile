@@ -3,19 +3,20 @@
        <img src="assets/img/technical-skill-icon.png" alt="Skill Icon" class="tech-icon">
        <span>Technical Skills</span>
     </div>
-    <p class="body-text">You have been redirected to e-Profile to fill your Technical Details</p>
     <div class="alert alert-danger" *ngIf="!validationFlag && alertFlag">Please fill all the Mandatory Fields*</div>
-    <div class="list-table width-control-table">
+       <div class="alert alert-danger" *ngIf="duplicateFlag">The skill you entered already exists</div>
+    <p class="body-text">You have been redirected to e-Profile to fill your Technical Details</p>
+    <div class="table-responsive list-table width-control-table">
             <table class="table table-bordered">
                 <thead>
                     <tr class="tablesize ">
                     <tr>
-                        <th  class="tabledrop" rowspan="2">SL.NO</th>
-                        <th  class="tabledrop" rowspan="2">Skills *</th>
-                        <th  class="tabledrop" rowspan="2">Core Skill *</th>
-                        <th  class="tabledrop" rowspan="2"> RATING *</th>
-                        <th  class="tabledrop" colspan="2">EXPERIENCE *</th>
-                        <th  class="tabledrop" rowspan="2"></th>
+                        <th  rowspan="2">SL.NO</th>
+                        <th  rowspan="2">Skills *</th>
+                        <th  rowspan="2">Core Skill *</th>
+                        <th  rowspan="2"> RATING *</th>
+                        <th  colspan="2">EXPERIENCE *</th>
+                        <th  rowspan="2"></th>
                     </tr>
                     <tr>
                         <th>Years</th>
@@ -25,7 +26,7 @@
             </table>
         <mat-spinner style="margin:0 auto;" class="mat-spinner-color" *ngIf = "spinnerFlag"></mat-spinner>
         <div *ngIf="!spinnerFlag" class="table-body-scroll">
-            <table class="table table-bordered" class="table table-bordered">
+            <table class="table-responsive table table-bordered">
                 <tbody>
                     <ng-container *ngFor="let skills of renderedAddedSkill; index as i">
                         <tr  *ngIf = "skills.coreskills.length > 0">
@@ -33,7 +34,7 @@
                             <td class="ver-mid text-center" *ngIf ="skills.coreskills.length > 0">{{skills.skillName}}</td>
                             <td>
                                 <div class="form-group" *ngFor="let parent of skills.coreskills">
-                                        <input type="text" name="coreskillName" #coreskill="ngModel" (change)="alert()" placeholder="Enter Core Skill Name" disabledclass="form-control"  id="exampleFormControlSelect1" [class.validationStyle] = "((coreskill.dirty || coreskill.touched || !validationFlag) && (coreskill.value == null)) ? true: false" [(ngModel)]="parent.core_Skill_Name" [disabled]="skills.skillName != 'Others'" required><br>
+                                        <input type="text" name="coreskillName" #coreskill="ngModel" (change)="alert(parent, skills)" placeholder="Enter Core Skill Name" disabledclass="form-control"  id="exampleFormControlSelect1" [class.validationStyle] = "((coreskill.dirty || coreskill.touched || !validationFlag) && (coreskill.value == null)) ? true: false" [(ngModel)]="parent.core_Skill_Name" [disabled]="skills.skillName != 'Others'" required><br>
                                     <!-- <select class="form-control"  id="exampleFormControlSelect1" [(ngModel)]="parent.core_Skill_Name">
                                     <option *ngFor="let core of parent.defaultCoreSkills">{{core.core_Skill_Name}}</option>
                                     </select> -->
@@ -141,11 +142,13 @@
  </section>
  <!--modal popup-->
  <div id="skillRefModal" class="modal fade skill-model" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modalsize">
+        <div id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+   
        <!-- Modal content-->
-       <div class="modal-content modalheight">
+       <div class="modal-content">
           <div class="modal-header modalborder" >
-             <h4 class="modal-title text-left">Skill Reference</h4>
+             <h4 class="modal-title" id="exampleModalLabel">Skill Reference</h4>
              <button type="button" class="close" data-dismiss="modal">
              <img src="assets/img/close-icon.svg" alt="closeicon" class="close-icon"> </button>
           </div>
@@ -161,7 +164,7 @@
  
              <div class="col-12">
                 <div class="row ">
-                   <div class="table-responsive list-table list-table-popup" style="width: 700px; margin-top: 20px; border-bottom: 1px solid #e4e4e4">
+                   <div class="table-responsive list-table list-table-popup" style="margin-top: 10px; border-bottom: 1px solid #e4e4e4">
                       <table class="table table-bordered" style="table-layout :fixed" >
                          <tr>
                             <th>SI NO</th>

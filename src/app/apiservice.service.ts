@@ -20,7 +20,7 @@ export class EProfileService {
     // this.headers.append('Content-Type', 'application/json');
     // this.headers.append('uid', 'THANGAPRAKASH_A');
 
-    this.headers = new Headers({ 'Content-Type': 'application/json', 'uid': 'surendar_g' });
+    this.headers = new Headers({ 'Content-Type': 'application/json', 'uid': 'kirankumar_m' });
     this.options = new RequestOptions({ headers: this.headers });
   }
   getAllSkills() {

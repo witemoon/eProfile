@@ -46,6 +46,7 @@ export class TechSkillListComponent implements OnInit {
   employeeDetail : any;
   loginDetail : any;
   tempAllSkills: Allskils;
+  duplicateFlag : boolean = false;
 
 
 
@@ -197,7 +198,7 @@ addOtherSkill(){
   let otherIndex = this.tempAllSkills.skillLists.findIndex(skills => skills.skill_id == 0);
   let otherCoreSkills:any = {};
 
-  let skillItem = {} as AddSkillsModel;
+  let skillItem = {} as any;
     skillItem.skillId = 0;
     skillItem.skillName = "Others";
     otherCoreSkills.core_Skill_rating = 'Select';
@@ -208,6 +209,8 @@ addOtherSkill(){
       this.coreskills.push(otherCoreSkills);
       skillItem.coreskills = this.coreskills ;
       this.renderedAddedSkill.push(skillItem);
+      delete skillItem.coreSkills;
+      skillItem.coreSkills = this.coreskills;
       this.AllSkills.skillLists.push(skillItem);
 }
 
@@ -257,7 +260,7 @@ checkValue(event, skill, core) {
       this.renderedAddedSkill[index].coreskills.splice(parentIndex,1);
       if (this.renderedAddedSkill[index].coreskills.length <= 0) {
         let index = this.renderedAddedSkill.indexOf(unselectedskill);
-        this.renderedAddedSkill.splice(index, 1);
+        this.renderedAddedSkill.splice(index, 1); 
       }
     }
 
@@ -295,8 +298,10 @@ techSkillSubmit(){
 
 onDeleteSkillsRow(skills, coreSkills,id, newSkillSetIds, parentIndex) {
 
+  this.duplicateFlag = false;
+
   if(skills.skillId != 0){
-    // console.log('executing');
+    console.log('executing');
 
     let masterIndex = this.renderedAddedSkill.findIndex(skillFilter => {
       return skillFilter.skillId == skills.skillId;
@@ -309,9 +314,9 @@ onDeleteSkillsRow(skills, coreSkills,id, newSkillSetIds, parentIndex) {
     for (var e in this.AllSkills.skillLists) {
       for (var d in this.AllSkills.skillLists[e].coreSkills) {
         if (this.AllSkills.skillLists[e].coreSkills[d].core_skillid == id) {
-          // console.log("executed");
+          console.log("executed");
           this.AllSkills.skillLists[e].coreSkills[d].selected = false;
-          // console.log(this.AllSkills.skillLists[e]);
+          console.log(this.AllSkills.skillLists[e]);
         }
       }
     };
@@ -340,10 +345,12 @@ onDeleteSkillsRow(skills, coreSkills,id, newSkillSetIds, parentIndex) {
 
     else{
       for(i=0; i<this.renderedAddedSkill.length;i++){
-        if(this.renderedAddedSkill[i].coreskills[0].core_Skill_Name == coreSkills[0].core_Skill_Name){
-          masterIndex = i;
-          break;
-          }
+        if(this.renderedAddedSkill[i].coreskills.length > 0){
+          if(this.renderedAddedSkill[i].coreskills[0].core_Skill_Name == coreSkills[0].core_Skill_Name){
+            masterIndex = i;
+            break;
+            }
+        }
     }
     for (var e in this.AllSkills.skillLists) {
       for (var d in this.AllSkills.skillLists[e].coreSkills) {
@@ -417,8 +424,35 @@ validator(){
  }
 }
 
-alert(){
+alert(coreskill, skills){
   this.alertFlag = false;
+  let duplicated: any[] = [];
+  if(skills.skillId == 0){
+   
+    this.tempAllSkills.skillLists.forEach(parentSkills =>{
+      let temp2 = parentSkills.skill_Name || " "
+      if(temp2 == coreskill.core_Skill_Name.toLocaleLowerCase()){
+          duplicated.push(parentSkills);
+       }
+      else{
+              parentSkills.coreSkills.forEach(coreskills =>{
+              let temp = coreskills.core_Skill_Name || " ";
+              if(temp.toLocaleLowerCase() == coreskill.core_Skill_Name.toLocaleLowerCase()){
+                  duplicated.push(parentSkills);
+                  return;
+               }
+          })
+      }
+  })
+
+  if(duplicated.length > 1){
+    this.duplicateFlag = true;
+  }
+  else{
+    this.duplicateFlag = false;
+  }
+  }
+
 }
 
 onSaveSkillslist() {
