@@ -499,7 +499,7 @@ div.list-table.width-control-table > table {
     width: calc(100% - 0px);
 }
 .table-body-scroll {
-    max-height: 250px;
+    max-height: 230px;
     overflow-y: scroll;
     border: 1px solid #dee2e6;
 }
@@ -538,7 +538,7 @@ div.list-table.width-control-table > table {
 }
 
 .table.list-table-popup-body {
-  max-height: 250px;
+  max-height: 275px;
   overflow-y: scroll;
   margin-bottom: 0;
 }
@@ -610,12 +610,11 @@ div.list-table.width-control-table > table {
   /* 0 0 0 0.2rem #ef5f54 this for error red color */
 /* } */
 
-
- /* modified on 25th  */
+/* 
+/* modified on 25th 
 .table-responsive{
   overflow-x: hidden;
-} 
-/*
+}
 @media screen and (max-height: 1366px) and (min-height:768px) {
  .table-body-scroll{
    max-height: 240px;
@@ -641,7 +640,6 @@ div.list-table.width-control-table > table {
   color: #626161;
   border: solid 1px #626161;
   } 
-  
   .table-responsive {
     display: table;
 }

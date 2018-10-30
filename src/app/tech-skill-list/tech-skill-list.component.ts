@@ -75,14 +75,19 @@ export class TechSkillListComponent implements OnInit {
    
       this.apiservice.employeeDetail.subscribe( result => {
         this.employeeDetail = result.employeeDetails;
-        this.loginDetail = result.loginDetail[0];
-
-      
-
-      this.searchList = {
-        "insightId": this.employeeDetail.Insight_Id,
-        "searchKey": ""
-      };
+        if(result.loginDetail)
+        {
+          this.loginDetail = result.loginDetail[0];
+        }
+      if(this.employeeDetail){
+        this.searchList = {
+          "insightId": this.employeeDetail.Insight_Id,
+          "searchKey": ""
+        };
+      }
+      else{
+        this.searchList = {};
+      }
       
       this.apiservice.getEmployeeList(this.searchList).subscribe(result => {
         this.preStoredData = result[0];
@@ -96,11 +101,18 @@ export class TechSkillListComponent implements OnInit {
               var tempLoop = this.preStoredData.skillLists[i].coreSkills.length;
               this.coreskills = [];
               for(var j=0; j < tempLoop; j++){
-                 this.tempCoreSkills = {} as coreSkillsModel;
-                 this.tempCoreSkills.core_Skill_Experience_in_Months =  (this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
-                 this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
+                 this.tempCoreSkills = {} as any;
+                 if(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months != 0){
+                  this.tempCoreSkills.core_Skill_Experience_in_Months =   Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
+                  this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
+                 }
+                 else{
+                  this.tempCoreSkills.core_Skill_Experience_in_Months =   "Select";
+                  this.tempCoreSkills.core_Skill_Experience_in_Years = "Select";
+                 }
+                 
                  this.tempCoreSkills.core_Skill_Name = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Name;
-                 this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating || 0;
+                 this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating || "Select";
                  this.tempCoreSkills.core_skillid = this.preStoredData.skillLists[i].coreSkills[j].core_skillid;
                  this.tempCoreSkills.isSelected = true;
                  this.tempCoreSkills.newSkillSetIds = this.preStoredData.skillLists[i].coreSkills[j].newSkillSetIds;
@@ -130,8 +142,14 @@ export class TechSkillListComponent implements OnInit {
               skillItem.skillName = this.preStoredData.skillLists[i].skill_Name;
               this.coreskills = [];
                this.tempCoreSkills = {} as coreSkillsModel;
-               this.tempCoreSkills.core_Skill_Experience_in_Months =  (this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
-               this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
+               if(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months != 0){
+                this.tempCoreSkills.core_Skill_Experience_in_Months =   Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months%12) || 0;
+                this.tempCoreSkills.core_Skill_Experience_in_Years = Math.floor(this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Experience_in_Months / 12) || 0;
+               }
+               else{
+                this.tempCoreSkills.core_Skill_Experience_in_Months =   "Select";
+                this.tempCoreSkills.core_Skill_Experience_in_Years = "Select";
+               }
                this.tempCoreSkills.core_Skill_Name = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_Name;
                this.tempCoreSkills.core_Skill_rating = this.preStoredData.skillLists[i].coreSkills[j].core_Skill_rating || 0;
                this.tempCoreSkills.core_skillid = this.preStoredData.skillLists[i].coreSkills[j].core_skillid;
@@ -148,10 +166,11 @@ export class TechSkillListComponent implements OnInit {
         }
        
       });
-
-      this.apiservice.getSkipCount(this.employeeDetail.Employee_Id).subscribe(result =>{
-        this.skipCount = result.skipCount;
-      })
+      if(this.employeeDetail){
+        this.apiservice.getSkipCount(this.employeeDetail.Employee_Id).subscribe(result =>{
+          this.skipCount = result.skipCount || 0;
+        })
+      }
     
   })
 
@@ -163,12 +182,12 @@ selectedRoles = [];
 skipNow(){
 let payload =  {
               "employeeId":this.employeeDetail.Employee_Id,
-              "skipCount":this.skipCount -1
+              "skipCount":Number(this.skipCount) +1
                 }
     this.apiservice.postSkipCount(payload).subscribe(result=>{
     let status =  result.status;
     if(status == "success"){
-    this.skipCount = this.skipCount -1;
+    this.skipCount = this.skipCount +1;
      };
   })
 }
@@ -177,16 +196,23 @@ skipModal() {
   const dialogConfig = new MatDialogConfig();
  dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
+  let flag;
+  if(this.skipCount == 0)
+  flag = 2
+  else if(this.skipCount == 1)
+  flag = 1
+  else
+  flag = 0;
   dialogConfig.data = {
   id: 1,
-  description :"No of skips left : "+ this.skipCount,
+  description :"No of skips left : "+ flag,
   title : "Confirm Skip!"
   };
   const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
   dialogRef.afterClosed().subscribe(result => {
   if(result){
     this.skipNow();
-    window.location.href = "http://172.16.105.151:8080/router.html";
+   // window.location.href = "http://172.16.105.151:8080/router.html";
   }
 });
 }
@@ -276,16 +302,10 @@ techSkillSubmit(){
   this.addedSkill = this.renderedAddedSkill;
  }
 
- 
- skillModalShow(){
-   
- }
-
-
 
  onSubmit(renderedAddedSkill){
    this.validator();
-   if(this.validationFlag == true){
+   if(this.validationFlag == true && this.duplicateFlag == false){
     this.openModal();
    }
  }
@@ -424,20 +444,21 @@ validator(){
  }
 }
 
-alert(coreskill, skills){
+alert(coreskill?, skills?){
   this.alertFlag = false;
   let duplicated: any[] = [];
   if(skills.skillId == 0){
    
     this.tempAllSkills.skillLists.forEach(parentSkills =>{
-      let temp2 = parentSkills.skill_Name || " "
-      if(temp2 == coreskill.core_Skill_Name.toLocaleLowerCase()){
+      let temp2 = parentSkills.skill_Name || " ";
+      let temp3 = coreskill.core_Skill_Name || "undefined"
+      if(temp2 == temp3.toLocaleLowerCase()){
           duplicated.push(parentSkills);
        }
       else{
               parentSkills.coreSkills.forEach(coreskills =>{
               let temp = coreskills.core_Skill_Name || " ";
-              if(temp.toLocaleLowerCase() == coreskill.core_Skill_Name.toLocaleLowerCase()){
+              if(temp.toLocaleLowerCase() == temp3.toLocaleLowerCase()){
                   duplicated.push(parentSkills);
                   return;
                }
@@ -468,7 +489,7 @@ onSaveSkillslist() {
         newSkillName.push(skills.core_Skill_Name);
         coreSkillIds.push(skills.core_skillid || 0);
         coreSkillRatings.push(skills.core_Skill_rating);
-        coreExpInMonths.push(Number(skills.core_Skill_Experience_in_Years)*12+(Number(skills.core_Skill_Experience_in_Months)));
+        coreExpInMonths.push((Number(skills.core_Skill_Experience_in_Years)*12+(Number(skills.core_Skill_Experience_in_Months))) || 0);
         newSkillSetIds.push(skills.newSkillSetIds || 0);
       });
       

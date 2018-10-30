@@ -8,7 +8,6 @@ import { ManagerSkillListComponent } from './manager-skill-list/manager-skill-li
 const routes: Routes = [
   { path: 'techskill', component: TechSkillListComponent },
   { path: 'managerskill', component: ManagerSkillListComponent },
-
   {path:'',redirectTo:'/techskill',pathMatch:'full'}
 ];
 

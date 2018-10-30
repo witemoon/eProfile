@@ -20,6 +20,7 @@ import { ManagerSkillListComponent } from './manager-skill-list/manager-skill-li
 //import { StorageServiceModule} from 'angular-webstorage-service';
 import {LocalStorageModule } from 'angular-2-local-storage';
 import { DialogComponent } from './dialog/dialog.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 
 @NgModule({
@@ -50,7 +51,7 @@ import { DialogComponent } from './dialog/dialog.component';
     })
     //StorageServiceModule
       ],
-  providers: [EProfileService],
+  providers: [EProfileService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent],
   entryComponents: [
    DialogComponent

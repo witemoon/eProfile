@@ -11,20 +11,19 @@ export class EProfileService {
   public employeeDetail : Observable<any>;
   url2: string;
   url :string;
+  url3:string;
   options: RequestOptions;
   constructor(private https: HttpClient,private http: Http){
-    this.url = "http://172.16.107.83:9090/eprofile/api";  //Bhagya
-    this.url2 = 'http://10.100.201.35:9090/eprofile/api';  //Hari
+    this.url2 = "http://172.16.107.83:9090/eprofile/api";  //Bhagya
+    this.url = 'http://10.100.201.35:9090/eprofile/api';  //Hari
+    this.url3 = 'https://eprofile-qa.photoninfotech.com/eprofileSurvey/api'; //Dev
 
-    // this.headers = new HttpHeaders();
-    // this.headers.append('Content-Type', 'application/json');
-    // this.headers.append('uid', 'THANGAPRAKASH_A');
 
-    this.headers = new Headers({ 'Content-Type': 'application/json', 'uid': 'kirankumar_m' });
+    this.headers = new Headers({ 'Content-Type': 'application/json'});
     this.options = new RequestOptions({ headers: this.headers });
   }
   getAllSkills() {
-    return this.http.get(this.url+'/skill/allSkills', this.options).map(this.extractData);
+    return this.http.get(this.url+'/skill/allSkills').map(this.extractData);
   }
 
   postAddCoreSkills(payload) {
@@ -46,7 +45,7 @@ export class EProfileService {
   }
 
   postSkipCount(payload){
-    let body = JSON.stringify(payload);
+    let body = payload;
     return this.http.post(this.url +'/skill/insertSkipCount',body,this.options).map(this.extractData);
   }
 
