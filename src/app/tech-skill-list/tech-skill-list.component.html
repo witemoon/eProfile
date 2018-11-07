@@ -3,20 +3,19 @@
        <img src="assets/img/technical-skill-icon.png" alt="Skill Icon" class="tech-icon">
        <span>Technical Skills</span>
     </div>
-    <div class="alert alert-danger" *ngIf="!validationFlag && alertFlag">Please fill all the Mandatory Fields*</div>
-       <div class="alert alert-danger" *ngIf="duplicateFlag && !(!validationFlag && alertFlag)">The other core skill you entered already exists</div>
     <p class="body-text">You have been redirected to e-Profile to fill your Technical Details</p>
-    <div class="table-responsive list-table width-control-table">
+    <div class="alert alert-danger" *ngIf="!validationFlag && alertFlag">Please fill all the Mandatory Fields*</div>
+    <div class="list-table width-control-table">
             <table class="table table-bordered">
                 <thead>
                     <tr class="tablesize ">
                     <tr>
-                        <th  rowspan="2">SL.NO</th>
-                        <th  rowspan="2">Skills *</th>
-                        <th  rowspan="2">Core Skill *</th>
-                        <th  rowspan="2"> RATING *</th>
-                        <th  colspan="2">EXPERIENCE *</th>
-                        <th  rowspan="2"></th>
+                        <th  class="tabledrop" rowspan="2">SL.NO</th>
+                        <th  class="tabledrop" rowspan="2">Skills *</th>
+                        <th  class="tabledrop" rowspan="2">Core Skill *</th>
+                        <th  class="tabledrop" rowspan="2"> RATING *</th>
+                        <th  class="tabledrop" colspan="2">EXPERIENCE *</th>
+                        <th  class="tabledrop" rowspan="2"></th>
                     </tr>
                     <tr>
                         <th>Years</th>
@@ -26,7 +25,7 @@
             </table>
         <mat-spinner style="margin:0 auto;" class="mat-spinner-color" *ngIf = "spinnerFlag"></mat-spinner>
         <div *ngIf="!spinnerFlag" class="table-body-scroll">
-            <table class="table-responsive table table-bordered">
+            <table class="table table-bordered" class="table table-bordered">
                 <tbody>
                     <ng-container *ngFor="let skills of renderedAddedSkill; index as i">
                         <tr  *ngIf = "skills.coreskills.length > 0">
@@ -34,7 +33,7 @@
                             <td class="ver-mid text-center" *ngIf ="skills.coreskills.length > 0">{{skills.skillName}}</td>
                             <td>
                                 <div class="form-group" *ngFor="let parent of skills.coreskills">
-                                        <input type="text" name="coreskillName" #coreskill="ngModel" (change)="alert(parent, skills)" placeholder="Enter Core Skill Name" disabledclass="form-control"  id="exampleFormControlSelect1" [class.validationStyle] = "((coreskill.dirty || coreskill.touched || !validationFlag ) && (coreskill.value == null)) ? true: false" [(ngModel)]="parent.core_Skill_Name" [disabled]="skills.skillName != 'Others'" required><br>
+                                        <input type="text" name="coreskillName" #coreskill="ngModel" (change)="alert()" placeholder="Enter Core Skill Name" disabledclass="form-control"  id="exampleFormControlSelect1" [class.validationStyle] = "((coreskill.dirty || coreskill.touched || !validationFlag) && (coreskill.value == null)) ? true: false" [(ngModel)]="parent.core_Skill_Name" [disabled]="skills.skillName != 'Others'" required><br>
                                     <!-- <select class="form-control"  id="exampleFormControlSelect1" [(ngModel)]="parent.core_Skill_Name">
                                     <option *ngFor="let core of parent.defaultCoreSkills">{{core.core_Skill_Name}}</option>
                                     </select> -->
@@ -45,7 +44,7 @@
                             </td>
                             <td>
                                 <div class="form-group" *ngFor="let ratings of skills.coreskills">
-                                    <select class="form-control"  id="exampleFormControlSelect1" (change)="alert(ratings, skills)" [(ngModel)]="ratings.core_Skill_rating" #rating = "ngModel" [class.validationStyle] = "((rating.dirty || rating.touched || !validationFlag) && (ratings.core_Skill_rating == 'Select')) ? true: false">
+                                    <select class="form-control"  id="exampleFormControlSelect1" (change)="alert()" [(ngModel)]="ratings.core_Skill_rating" #rating = "ngModel" [class.validationStyle] = "((rating.dirty || rating.touched || !validationFlag) && (ratings.core_Skill_rating == 'Select')) ? true: false">
                                     <option value="Select">Select</option>
                                     <option>Beginner</option>
                                     <option>Intermediate</option>
@@ -56,7 +55,7 @@
                             <td >
                                 <div class="form-group" placeholder="Years"  *ngFor="let months of skills.coreskills">
                                     <!-- <input style="width:100px;margin-left: 25px" type="number" placeholder="Years" [(ngModel)]="months.core_Skill_Experience_in_Years"> -->
-                                    <select class="form-control form yersmnt-dropdown" id="exampleFormControlSelect1" (change)="alert(months, skills)" #years="ngModel"  [(ngModel)]="months.core_Skill_Experience_in_Years" [class.validationStyle] = "((years.dirty || years.touched || !validationFlag) && (months.core_Skill_Experience_in_Years == 'Select')) ? true: false">
+                                    <select class="form-control form yersmnt-dropdown" id="exampleFormControlSelect1" (change)="alert()" #years="ngModel"  [(ngModel)]="months.core_Skill_Experience_in_Years" [class.validationStyle] = "((years.dirty || years.touched || !validationFlag) && (months.core_Skill_Experience_in_Years == 'Select')) ? true: false">
                                     <option value="Select">Select</option>
                                     <option value=0> 0 </option>
                                     <option value=1>1 </option>
@@ -98,7 +97,7 @@
                       
                             <td>
                                 <div class="form-group" *ngFor="let months of skills.coreskills">
-                                    <select class="form-control yersmnt-dropdown"  id="exampleFormControlSelect1" (change)="alert(months, skills)" [(ngModel)]="months.core_Skill_Experience_in_Months" #month="ngModel"  [class.validationStyle] = "((month.dirty || month.touched || !validationFlag) && (months.core_Skill_Experience_in_Months == 'Select')) ? true: false">
+                                    <select class="form-control yersmnt-dropdown"  id="exampleFormControlSelect1" (change)="alert()" [(ngModel)]="months.core_Skill_Experience_in_Months" #month="ngModel"  [class.validationStyle] = "((month.dirty || month.touched || !validationFlag) && (months.core_Skill_Experience_in_Months == 'Select')) ? true: false">
                                         <option value="Select">Select</option>
                                         <option value=0>0 </option>
                                     <option value=1>1 </option>
@@ -130,25 +129,23 @@
     <!--User Table-->
     <div class="mtop-25">
         <div class="bottom_sub mtop-25">
-            <button class="add-btn" data-toggle="modal" data-target="#skillRefModal">
+            <button class="add-btn" data-toggle="modal" data-target="#skillRefModal" (click)="skillModalShow()">
                     <img src="assets/img/add-icon.png" alt="add button"> Add Skills</button>
-            <button type="submit" class="btn btn-submit-org" (click)="onSaveSkillslist()" [disabled] = "renderedAddedSkill.length <= 0">Save</button>
+            <button type="submit" class="btn btn-submit-org" (click)="onSaveSkillslist()">Save</button>
           <div class="pull-right">
              <button type="submit" class="btn btn-submit-org"  (click)="onSubmit(renderedAddedSkill)" [disabled] = "renderedAddedSkill.length <= 0">Submit</button>
-             <button type="submit" class="btn btn-skip" style="margin-left:0" (click)="skipModal()" [disabled]= 'skipCount >= 2' >Skip for Now</button>
+             <button type="submit" class="btn btn-skip" style="margin-left:0" (click)="skipModal()" [disabled]= 'skipCount == 0' >Skip for Now</button>
           </div>
        </div>
     </div>
  </section>
  <!--modal popup-->
  <div id="skillRefModal" class="modal fade skill-model" role="dialog" data-backdrop="static" data-keyboard="false">
-        <div id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-   
+    <div class="modal-dialog modalsize">
        <!-- Modal content-->
-       <div class="modal-content">
+       <div class="modal-content modalheight">
           <div class="modal-header modalborder" >
-             <h4 class="modal-title" id="exampleModalLabel">Skill Reference</h4>
+             <h4 class="modal-title text-left">Skill Reference</h4>
              <button type="button" class="close" data-dismiss="modal">
              <img src="assets/img/close-icon.svg" alt="closeicon" class="close-icon"> </button>
           </div>
@@ -164,7 +161,7 @@
  
              <div class="col-12">
                 <div class="row ">
-                   <div class="table-responsive list-table list-table-popup" style="margin-top: 10px; border-bottom: 1px solid #e4e4e4">
+                   <div class="table-responsive list-table list-table-popup" style="width: 700px; margin-top: 20px; border-bottom: 1px solid #e4e4e4">
                       <table class="table table-bordered" style="table-layout :fixed" >
                          <tr>
                             <th>SI NO</th>

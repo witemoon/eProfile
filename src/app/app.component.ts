@@ -25,16 +25,12 @@ export class AppComponent {
 
     ngOnInit() {
 
-
-    this.isauthanticate = {
-                            "insightId": "ajay_pr",
-                            "isAuthenticate":true
-                          };
+    this.isauthanticate = {"isAuthenticate":true};
  
     this.apiservice.getEmployeeDetail(this.isauthanticate).subscribe(
         result => {
           this.empDetailslist = result.loginDetail;
-        //console.log('test', this.empDetailslist);
+     //  console.log('test', this.empDetailslist);
       
         // for (var i = 0; i < this.empDetailslist.length; i++) {
 
